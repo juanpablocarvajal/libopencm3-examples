@@ -133,7 +133,7 @@ static void tim_setup(void)
 	 * is strictly unnecessary, but demos the api for alternative settings)
 	 */
 	timer_set_mode(TIM1, TIM_CR1_CKD_CK_INT,
-                   TIM_CR1_CMS_CENTER_3, TIM_CR1_DIR_UP);
+                   TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
 
 	/*
 	 * Please take note that the clock source for STM32 timers
@@ -149,7 +149,7 @@ static void tim_setup(void)
 	timer_set_period(TIM1, 2563);
 
 	/* Set the initual output compare value for OC1. */
-	timer_set_oc_value(TIM1, TIM_OC1, 320); // no usar los negativos
+	timer_set_oc_value(TIM1, TIM_OC1, 1281); // no usar los negativos
 
     /* Disable outputs. */
     //timer_enable_oc_output(TIM1, TIM_OC1);
