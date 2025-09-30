@@ -140,7 +140,7 @@ static void tim_setup(void)
 	 * might not be the raw APB1/APB2 clocks.  In various conditions they
 	 * are doubled.  See the Reference Manual for full details!
 	 */
-	timer_set_prescaler(TIM1, 0xFFFF); // 2563Hz clk
+    timer_set_prescaler(TIM1, 4096); // 2563Hz clk
     //timer_set_repetition_counter(TIM1, 15);
     timer_disable_preload(TIM1);
     timer_continuous_mode(TIM1);
