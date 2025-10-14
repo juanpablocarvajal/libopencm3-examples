@@ -52,6 +52,7 @@
       TIM1CLK = 4*PCLK
  */
 
+void delay(uint32_t);
 
 /* Set STM32 to 168 MHz. */
 static void clock_setup(void)
@@ -149,7 +150,7 @@ static void tim_setup(void)
 	timer_set_period(TIM1, 6588);
 
 	/* Set the initual output compare value for OC1. */
-	timer_set_oc_value(TIM1, TIM_OC1, 658); // no usar los negativos
+	timer_set_oc_value(TIM1, TIM_OC1, 0); // no usar los negativos
 
     /* Disable outputs. */
     //timer_enable_oc_output(TIM1, TIM_OC1);
@@ -192,14 +193,22 @@ void tim1_up_tim10_isr(void)
   gpio_toggle(LUP);
 }
 
+void delay(volatile uint32_t seconds) {
+
+  uint32_t clocks = 16800000;
+  for (unsigned int i = 0; i < seconds * clocks; i++) { /* Wait a bit. */
+	  __asm__("nop");
+   }
+
+}
+
 
 int main(void)
 {
-	int i;
 
 	clock_setup();
 	gpio_setup();
-    tim_setup();
+        tim_setup();
 
 	/* Set two LEDs for wigwag effect when toggling. */
 	gpio_set(LGREENF_PORT, LGREENF);
@@ -208,9 +217,24 @@ int main(void)
 	while (1) {
 		/* Toggle LEDs. */
 		gpio_toggle(LGREENF_PORT, LGREENF);
-		for (i = 0; i < 6000000; i++) { /* Wait a bit. */
-			__asm__("nop");
-		}
+
+		timer_set_oc_value(TIM1, TIM_OC1, 329); // 0%
+		delay(2);
+		
+		timer_set_oc_value(TIM1, TIM_OC1, 361); // 10%
+		delay(1);
+
+		timer_set_oc_value(TIM1, TIM_OC1, 658); // 100 %
+		delay(3);
+
+		timer_set_oc_value(TIM1, TIM_OC1, 493); // 50%
+		delay(1);
+
+		timer_set_oc_value(TIM1, TIM_OC1, 361); // 10%
+		delay(5);
+
+	       
+	
 	}
 
 	return 0;
